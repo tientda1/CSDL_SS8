@@ -123,33 +123,23 @@ order by total_bookings DESC
 limit 1;
 
 -- P3 : Truy vấn lồng
--- C1 
-SELECT 
-    room_id, 
-    room_type, 
-    price_per_day
-FROM rooms
-WHERE price_per_day > (SELECT AVG(price_per_day) FROM rooms);
+-- C1 : Hiển thị những phòng có giá thuê cao hơn giá trung bình của tất cả các phòng
+select room_id, room_type, price_per_day
+from rooms
+where price_per_day > (select avg(price_per_day) from rooms);
 
--- C2
-SELECT 
-    g.guest_id, 
-    g.guest_name, 
-    g.phone
-FROM guests g
-LEFT JOIN bookings b ON g.guest_id = b.guest_id
-WHERE b.booking_id IS NULL;
+-- C2 : Hiển thị những khách chưa từng đặt phòng
+select g.guest_id, g.guest_name, g.phone
+from guests g
+left join bookings b on g.guest_id = b.guest_id
+where b.booking_id is null;
 
--- C3
-SELECT 
-    r.room_id, 
-    r.room_type, 
-    COUNT(b.booking_id) AS total_bookings
-FROM bookings b
-JOIN rooms r ON b.room_id = r.room_id
-GROUP BY r.room_id, r.room_type
-ORDER BY total_bookings DESC
-LIMIT 1;
+-- C3 : Tìm phòng được đặt nhiều lần nhất
+select r.room_id, r.room_type, count(b.booking_id) as total_bookings
+from bookings b
+join rooms r on b.room_id = r.room_id
+group by r.room_id, r.room_type
+order by total_bookings desc limit 1;
  
 
 
